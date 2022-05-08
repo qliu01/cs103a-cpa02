@@ -1,0 +1,47 @@
+
+
+    <div class="jumbotron">
+        <h1>Movie Finder</h1>
+        <p></p>
+    </div>
+
+    <p class="p-3 m-3 border border-primary bg-light">
+        The goal of this assignment is to write an app that will let
+        students pick their courses for the year. Since we don't have 
+        the data for this year (due to workday issues), we will use the 
+        2020-2021 Academic year data. You must signup or login to see
+        the courses and create your schedule.
+    </p>
+    
+    <% if (true ) {%>
+        <form method="post" action="/movies/byYear">
+            Show Movies by Year:
+              <input type="number" name="year"
+                     placeholder="e.g. 2015">
+            <input type="submit">
+        </form>
+        <br>
+        <form method="post" action="/movies/byActor">
+            Show Movies by Actor:
+            <input type="text" name="actor"
+                   placeholder="e.g. Colin Farrell">
+            <input type="submit">
+        </form>
+        <br>
+        <form method="post" action="/movies/byGenre">
+            Show Movies by Genre:
+            <input type="text" name="genre"
+                   placeholder="e.g. Horror">
+            <input type="submit">
+        </form>
+        <br>
+        <form method="post" action="/movies/byTitle">
+            Show Movies by Title:
+            <input type="text" name="title"
+                   placeholder="e.g. The Avengers">
+            <input type="submit">
+        </form>
+        <br>
+    <% } %>
+
+

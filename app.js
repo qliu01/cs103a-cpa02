@@ -32,7 +32,7 @@ const courses2021 = require('./public/data/courses20-21.json')
 const courses2122 = require('./public/data/courses21-22.json')
 const courses = courses2122
 
-const movies = require('./public/data/movies.json')
+const movies = require('./public/data/moviesSampled.json')
 
 // *********************************************************** //
 //  Connecting to the database 
@@ -40,8 +40,8 @@ const movies = require('./public/data/movies.json')
 
 const mongoose = require( 'mongoose' );
 
-const mongodb_URI = process.env.mongodb_URI
-//const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
+//const mongodb_URI = process.env.mongodb_URI
+const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
 //const mongodb_URI = 'mongodb+srv://cs_sj:BrandeisSpr22@cluster0.kgugl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
@@ -142,6 +142,10 @@ app.get("/", (req, res, next) => {
 
 app.get("/coursefinder", (req, res, next) => {
   res.render("coursefinder");
+});
+
+app.get("/moviefinder", (req, res, next) => {
+    res.render("moviefinder");
 });
 
 app.get("/about", (req, res, next) => {
@@ -252,12 +256,89 @@ app.get('/upsertMovies',
         await Movie.deleteMany({})
         for (movie of movies){
             const {title,year,cast,genres}=movie;
-            await Movie.findOneAndUpdate({title,year,cast,genres},course,{upsert:true})
+            await Movie.findOneAndUpdate({title,year,cast,genres},movie,{upsert:true})
         }
         const num = await Movie.find({}).countDocuments();
         res.send("data uploaded: "+num)
     }
 )
+
+app.post('/movies/byActor',
+    // show courses taught by a faculty send from a form
+    async (req,res,next) => {
+        try {
+            const actor = req.body.actor;
+            const movies =
+                await Movie
+                    .find({cast: actor})
+                    .sort({year: 1})
+            //res.json(courses)
+            res.locals.movies = movies
+            res.render('movielist')
+        } catch(error){
+            next(error)
+        }
+    }
+)
+
+app.post('/movies/byYear',
+    // show courses taught by a faculty send from a form
+    async (req,res,next) => {
+        try {
+            const year = req.body.year;
+            const movies =
+                await Movie
+                    .find({year:year})
+                    .sort({title: 1})
+            //res.json(courses)
+            res.locals.movies = movies
+            res.locals.times2str = times2str
+            res.render('movielist')
+        } catch(error){
+            next(error)
+        }
+    }
+)
+
+app.post('/movies/byTitle',
+    // show courses taught by a faculty send from a form
+    async (req,res,next) => {
+        try {
+            const title = req.body.title;
+            const movies =
+                await Movie
+                    .find({title:title})
+                    .sort({year: 1})
+            //res.json(courses)
+            res.locals.movies = movies
+            res.locals.times2str = times2str
+            res.render('movielist')
+        } catch(error){
+            next(error)
+        }
+    }
+)
+
+
+app.post('/movies/byGenre',
+    // show courses taught by a faculty send from a form
+    async (req,res,next) => {
+        try {
+            const genre = req.body.genre;
+            const movies =
+                await Movie
+                    .find({genres: genre})
+                    .sort({year: 1})
+            //res.json(courses)
+            res.locals.movies = movies
+            res.locals.times2str = times2str
+            res.render('movielist')
+        } catch(error){
+            next(error)
+        }
+    }
+)
+
 
 
 app.post('/courses/bySubject',
@@ -641,7 +722,7 @@ app.use(function(err, req, res, next) {
 //  Starting up the server!
 // *********************************************************** //
 //Here we set the port to use between 1024 and 65535  (2^16-1)
-const port = process.env.PORT || "5000"; 
+const port = process.env.PORT || "5050";
 console.log('connecting on port '+port)
 
 app.set("port", port);
