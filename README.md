@@ -1,7 +1,8 @@
-# CS103a Express App Demo
+# CS103a CP02
 
-This is a starter project which has a simple authentication module 
-and provides access to a mongoose database in the cloud.
+- Creator: Qing Liu 
+- Heroku link: https://secure-ravine-60727.herokuapp.com/
+- Video:
 
 ## Installation
 Download the project from github and download nodejs and npm from https://nodejs.org
@@ -23,4 +24,18 @@ and start the project with
 ``` bash
 nodemon
 ```
+
+## Screenshots 
+- Main search page
+![Search page](public/images/main.png)
+- About page
+![About page](public/images/about.png)
+- Search by title
+![Search by title](public/images/byTitle.png)
+- Search by year (the screenshot shows movies from the year 2015)
+![Search by year](public/images/byYear.png)
+- Search by actor (the screenshot shows movies with my favorite actor, Colin Farrell!)
+![Search by actor](public/images/colinFarrell.png)
+- Search by actor (the screenshot shows comedy movies)
+![Search by actor](public/images/comedy.png)
 
