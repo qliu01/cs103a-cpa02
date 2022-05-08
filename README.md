@@ -36,6 +36,6 @@ nodemon
 ![Search by year](public/images/byYear.png)
 - Search by actor (the screenshot shows movies with my favorite actor, Colin Farrell!)
 ![Search by actor](public/images/colinFarrell.png)
-- Search by actor (the screenshot shows comedy movies)
-![Search by actor](public/images/comedy.png)
+- Search by genre(the screenshot shows comedy movies)
+![Search by genre](public/images/comedy.png)
 
