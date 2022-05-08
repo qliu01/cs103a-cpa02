@@ -20,10 +20,9 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 // *********************************************************** //
 //  Loading models
 // *********************************************************** //
-const ToDoItem = require("./models/ToDoItem")
+const Movie = require('./models/Movie')
 const Course = require('./models/Course')
 const Schedule = require('./models/Schedule')
-const Overheard = require('./models/Overheard')
 
 // *********************************************************** //
 //  Loading JSON datasets
@@ -32,6 +31,9 @@ const Overheard = require('./models/Overheard')
 const courses2021 = require('./public/data/courses20-21.json')
 const courses2122 = require('./public/data/courses21-22.json')
 const courses = courses2122
+
+const movies = require('./public/data/movies.json')
+
 // *********************************************************** //
 //  Connecting to the database 
 // *********************************************************** //
@@ -142,31 +144,6 @@ app.get("/coursefinder", (req, res, next) => {
   res.render("coursefinder");
 });
 
-app.get('/overheardForm',
-  (req,res,next) => {
-    res.render('overheardForm')
-  })
-
-app.post('/overheard',
-  isLoggedIn,
-  async (req,res,next) => {
-    const {overheard} = req.body
-    const item = new Overheard({
-      userId: req.session.user._id,
-      comment:overheard,
-      createAt: new Date()
-    })
-    await item.save()
-    res.redirect('/overheard')
-  })
-
-  app.get('/overheard', 
-    async (req,res,next) => {
-      const items = await Overheard.find({})
-      res.json(items)
-      //res.render('overheard')
-    })
-
 app.get("/about", (req, res, next) => {
   res.render("about");
 });
@@ -197,66 +174,6 @@ app.get("/demo",
 })
 
 
-/*
-    ToDoList routes
-*/
-app.get('/todo',
-  isLoggedIn,   // redirect to /login if user is not logged in
-  async (req,res,next) => {
-    try{
-      let userId = res.locals.user._id;  // get the user's id
-      let items = await ToDoItem.find({userId:userId}); // lookup the user's todo items
-      res.locals.items = items;  //make the items available in the view
-      res.render("toDo");  // render to the toDo page
-    } catch (e){
-      next(e);
-    }
-  }
-  )
-
-  app.post('/todo/add',
-  isLoggedIn,
-  async (req,res,next) => {
-    try{
-      const {title,description} = req.body; // get title and description from the body
-      const userId = res.locals.user._id; // get the user's id
-      const createdAt = new Date(); // get the current date/time
-      let data = {title, description, userId, createdAt,} // create the data object
-      let item = new ToDoItem(data) // create the database object (and test the types are correct)
-      await item.save() // save the todo item in the database
-      res.redirect('/todo')  // go back to the todo page
-    } catch (e){
-      next(e);
-    }
-  }
-  )
-
-  app.get("/todo/delete/:itemId",
-    isLoggedIn,
-    async (req,res,next) => {
-      try{
-        const itemId=req.params.itemId; // get the id of the item to delete
-        await ToDoItem.deleteOne({_id:itemId}) // remove that item from the database
-        res.redirect('/todo') // go back to the todo page
-      } catch (e){
-        next(e);
-      }
-    }
-  )
-
-  app.get("/todo/completed/:value/:itemId",
-  isLoggedIn,
-  async (req,res,next) => {
-    try{
-      const itemId=req.params.itemId; // get the id of the item to delete
-      const completed = req.params.value=='true';
-      await ToDoItem.findByIdAndUpdate(itemId,{completed}) // remove that item from the database
-      res.redirect('/todo') // go back to the todo page
-    } catch (e){
-      next(e);
-    }
-  }
-)
 
 /* ************************
   Functions needed for the course finder routes
@@ -328,6 +245,18 @@ app.get('/upsertDB',
     const num = await Course.find({}).countDocuments();
     res.send("data uploaded: "+num)
   }
+)
+
+app.get('/upsertMovies',
+    async (req,res,next) => {
+        await Movie.deleteMany({})
+        for (movie of movies){
+            const {title,year,cast,genres}=movie;
+            await Movie.findOneAndUpdate({title,year,cast,genres},course,{upsert:true})
+        }
+        const num = await Movie.find({}).countDocuments();
+        res.send("data uploaded: "+num)
+    }
 )
 
 
