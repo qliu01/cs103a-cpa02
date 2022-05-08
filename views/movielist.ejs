@@ -19,7 +19,11 @@ Here we want a ul list with the instructor, coursenum, title, term
          %>
       <tr class="mb-2"> 
         <td><%= title %></td>
-        <td><%= year %></td>
+          <td>
+          <a href="/movies/byYear/<%=movie.year %>">
+              <%=  movie.year %>
+          </a>
+          </td>
         <td><%= cast %></td>
         <td><%= genres %></td>
     </tr>

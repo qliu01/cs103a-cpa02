@@ -300,6 +300,20 @@ app.post('/movies/byYear',
     }
 )
 
+app.get('/movies/byYear/:year',
+    // show list of courses in a given subject
+    async (req,res,next) => {
+        const {year} = req.params;
+        const movies = await Movie.find({year:year}).sort({title:1})
+
+        res.locals.movies = movies
+        res.locals.times2str = times2str
+        //res.json(courses)
+        res.render('movielist')
+    }
+)
+
+
 app.post('/movies/byTitle',
     // show courses taught by a faculty send from a form
     async (req,res,next) => {
