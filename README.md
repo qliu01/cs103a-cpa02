@@ -2,7 +2,7 @@
 
 - Creator: Qing Liu 
 - Heroku link: https://secure-ravine-60727.herokuapp.com/
-- Video:
+- Video: https://drive.google.com/file/d/18tWFAp3qOugbwZSL173YR1wbQz14FoKT/view?usp=sharing
 
 ## Installation
 Download the project from github and download nodejs and npm from https://nodejs.org
